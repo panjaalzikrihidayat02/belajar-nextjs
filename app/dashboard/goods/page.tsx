@@ -2,31 +2,30 @@
 
 import { useState, useEffect } from 'react';
 
-// Data dummy untuk customer
-const customerData = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', phone: '+1234567890', address: 'New York, USA' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '+0987654321', address: 'London, UK' },
-  { id: 3, name: 'Alice Johnson', email: 'alice@example.com', phone: '+1122334455', address: 'Sydney, Australia' },
-  { id: 4, name: 'Bob Brown', email: 'bob@example.com', phone: '+2233445566', address: 'Berlin, Germany' },
-  { id: 5, name: 'Charlie White', email: 'charlie@example.com', phone: '+3344556677', address: 'Paris, France' },
-  { id: 6, name: 'David Green', email: 'david@example.com', phone: '+4455667788', address: 'Tokyo, Japan' },
-  { id: 7, name: 'Emma Blue', email: 'emma@example.com', phone: '+5566778899', address: 'Toronto, Canada' },
-  { id: 8, name: 'Frank Black', email: 'frank@example.com', phone: '+6677889900', address: 'Dubai, UAE' },
-  { id: 9, name: 'Grace Yellow', email: 'grace@example.com', phone: '+7788990011', address: 'Singapore' },
-  { id: 10, name: 'Henry Orange', email: 'henry@example.com', phone: '+8899001122', address: 'Bangkok, Thailand' },
+// Data dummy untuk goods
+const goodsData = [
+  { id: 1, name: 'Laptop Pro X', category: 'Electronics', price: '$1200', stock: 15 },
+  { id: 2, name: 'Wireless Headphones', category: 'Audio', price: '$150', stock: 50 },
+  { id: 3, name: 'Smartphone Z10', category: 'Electronics', price: '$800', stock: 25 },
+  { id: 4, name: 'Bluetooth Speaker', category: 'Audio', price: '$70', stock: 100 },
+  { id: 5, name: 'Gaming Mouse', category: 'Gaming', price: '$50', stock: 30 },
+  { id: 6, name: '4K Monitor', category: 'Electronics', price: '$300', stock: 10 },
+  { id: 7, name: 'VR Headset', category: 'Gaming', price: '$400', stock: 5 },
+  { id: 8, name: 'Mechanical Keyboard', category: 'Gaming', price: '$120', stock: 20 },
+  { id: 9, name: 'Smartwatch W2', category: 'Wearables', price: '$200', stock: 40 },
+  { id: 10, name: 'Camera DSLR', category: 'Photography', price: '$600', stock: 8 },
 ];
 
-export default function CustomerTable() {
+export default function GoodsPage() {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   // Filter data berdasarkan pencarian
-  const filteredData = customerData.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(search.toLowerCase()) ||
-      customer.email.toLowerCase().includes(search.toLowerCase()) ||
-      customer.phone.includes(search)
+  const filteredData = goodsData.filter(
+    (item) =>
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      item.category.toLowerCase().includes(search.toLowerCase())
   );
 
   // Pagination logic
@@ -39,19 +38,22 @@ export default function CustomerTable() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white rounded-3xl shadow-lg">
+      {/* Header */}
+      <h1 className="text-3xl font-bold text-teal-600 mb-6 text-center">Goods List</h1>
+
       {/* Search Bar */}
       <div className="mb-6">
         <input
           type="text"
-          placeholder="Search by name, email, or phone..."
+          placeholder="Search by name or category..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
         />
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Responsive Table or Card Layout */}
+      <div className="overflow-x-auto md:block hidden">
         <table className="w-full text-sm text-left text-gray-700">
           <thead className="text-xs text-white uppercase bg-teal-500">
             <tr>
@@ -59,35 +61,54 @@ export default function CustomerTable() {
                 Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Email
+                Category
               </th>
               <th scope="col" className="px-6 py-3">
-                Phone
+                Price
               </th>
               <th scope="col" className="px-6 py-3 rounded-tr-lg">
-                Address
+                Stock
               </th>
             </tr>
           </thead>
           <tbody>
             {paginatedData.length > 0 ? (
-              paginatedData.map((customer) => (
-                <tr key={customer.id} className="border-b hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
-                  <td className="px-6 py-4">{customer.email}</td>
-                  <td className="px-6 py-4">{customer.phone}</td>
-                  <td className="px-6 py-4">{customer.address}</td>
+              paginatedData.map((item) => (
+                <tr key={item.id} className="border-b hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.name}</td>
+                  <td className="px-6 py-4">{item.category}</td>
+                  <td className="px-6 py-4">{item.price}</td>
+                  <td className="px-6 py-4">{item.stock}</td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan={4} className="px-6 py-4 text-center text-gray-500">
-                  No customer data found
+                  No goods found
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Card Layout for Mobile */}
+      <div className="md:hidden space-y-4">
+        {paginatedData.length > 0 ? (
+          paginatedData.map((item) => (
+            <div
+              key={item.id}
+              className="bg-gray-50 p-4 rounded-lg shadow-sm hover:bg-gray-100 transition-all"
+            >
+              <p className="font-semibold text-gray-900">Name: {item.name}</p>
+              <p className="text-gray-700">Category: {item.category}</p>
+              <p className="text-gray-700">Price: {item.price}</p>
+              <p className="text-gray-700">Stock: {item.stock}</p>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-500">No goods found</div>
+        )}
       </div>
 
       {/* Pagination */}
